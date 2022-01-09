@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-10 py-3 col-md-3 mx-auto">
-        <form action="/create_tweet" method="post" class="form">
+        <form action="/create_tweet" id="tweet-create-form" method="post" class="form">
             {%csrf_token%}
             <input type="hidden" value="/" name="next">    
             <textarea class="form-control" name="content" placeholder="Write down your tweet..."></textarea>
@@ -20,6 +20,28 @@
 <div class="row" id="tweets">Replace Me...</div>
 
 <script>
+    function handleTweetCreateFormSubmit(event){
+        event.preventDefault()
+        const myForm = event.target
+        const myFormData = new FormData(myForm)
+        const url = myForm.getAttribute("action")
+        const method = myForm.getAttribute("method")
+        const xhr = new XMLHttpRequest()
+        const responseType = 'json'
+        xhr.open(method,url)
+        xhr.setRequestHeader("HTTP_X_REQUESTED_WITH","XMLHttpRequest")
+        xhr.setRequestHeader("X-Requested-With","XMLHttpRequest")
+        xhr.onload = function(){
+            const serverResponse = xhr.response
+            console.log(xhr.status, serverResponse)
+        }
+        xhr.send(myFormData)
+        const tweetsEl= document.getElementById("tweets")
+        loadTweets(tweetsEl)
+
+    }
+    const TweetCreateFormEl = document.getElementById('tweet-create-form')
+    TweetCreateFormEl.addEventListener('submit',handleTweetCreateFormSubmit)
     const tweetsEl= document.getElementById("tweets")
     function loadTweets(tweetsElements){
         const xhr = new XMLHttpRequest()
@@ -54,7 +76,7 @@
         return "<button class='btn btn-primary' onclick=handleDidLike("+ tweet.id+","+tweet.likes+")>"+tweet.likes +" Likes</button>"
     }
 
-    function formatTweetElement(tweet){
+    function .(tweet){
         var formattedTweet= "<div class=' col-12 col-md-10 mx-auto rounded py-3 border py-3 mb-4 tweet' id='tweet-"+tweet.id+"'><h1>"+ tweet.id + "</h1>" + "<p>" + tweet.content + 
             "</p><div class='btn-group'>"+
             LikeBtn(tweet) +

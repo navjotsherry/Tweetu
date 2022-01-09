@@ -3,7 +3,6 @@ from Tweetu import settings
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from django.utils.http import is_safe_url
-import random
 
 from Tweetu.settings import ALLOWED_HOSTS
 from .forms import TweeetForm
@@ -26,14 +25,16 @@ def tweet_create_view(request,*args,**kwargs):
     if form.is_valid:
         obj = form.save(commit=False)
         obj.save()
-        form = TweeetForm()
+        if request.is_ajax():
+            return JsonResponse(obj.serialize(), status=201)
         if next_url!=None and is_safe_url(next_url,allowed_hosts=ALLOWED_HOSTS):
             return redirect(next_url)
+        form = TweeetForm()
     return render(request,'components/forms.html', context={"form":form})
 
 def tweet_list_view(request):
     qs = Tweet.objects.all()
-    tweet_list= [{"id":x.id, "content":x.content,"likes":random.randint(0,100)} for x in qs]
+    tweet_list= [x.serialize() for x in qs]
     data= {
         "response": tweet_list
     }
