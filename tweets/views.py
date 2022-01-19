@@ -1,5 +1,4 @@
 from django.http.response import Http404
-from Tweetu import settings
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from django.utils.http import is_safe_url
@@ -22,15 +21,21 @@ def home_view(request, *args,**kwargs):
 def tweet_create_view(request,*args,**kwargs):
     next_url = request.POST.get('next') or None
     form = TweeetForm(request.POST or None)
-    if form.is_valid:
+    if form.is_valid():
         obj = form.save(commit=False)
         obj.save()
         if request.is_ajax():
-            return JsonResponse(obj.serialize(), status=201)
+            status=201
+            return JsonResponse(obj.serialize(),status=status)
         if next_url!=None and is_safe_url(next_url,allowed_hosts=ALLOWED_HOSTS):
             return redirect(next_url)
         form = TweeetForm()
-    return render(request,'components/forms.html', context={"form":form})
+    if form.errors:
+        print("Error Spotted")
+        if request.is_ajax():
+            status=400
+            return JsonResponse(form.errors, status=status)
+    return render(request,'components/forms.html', context={"form":form},status=status)
 
 def tweet_list_view(request):
     qs = Tweet.objects.all()
@@ -53,4 +58,4 @@ def tweet_detail_view(request,tweet_id, *args,**kwargs):
         data['message']= 'Not Found'
         status = 404
     
-    return JsonResponse(data,status = status)
+    return JsonResponse(data,status=status)
