@@ -1,12 +1,18 @@
+from tkinter import CASCADE
 from django.db import models
 import random
+from django.conf import settings
 
 # Create your models here.
 
+User = settings.AUTH_USER_MODEL
+
 class Tweet(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     content = models.TextField()
     image = models.FileField(upload_to='images/',blank=True,null=True)
     
+
     class Meta:
         ordering = ['-id']
 
