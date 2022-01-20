@@ -6,7 +6,6 @@ function handleTweetFormError(msg,display){
     }
     else{
         tweetCreateErrorHandler.setAttribute("class","d-none alert alert-danger")
-        console.clear
     }
 }
 
@@ -41,7 +40,11 @@ function handleTweetCreateFormSubmit(event) {
             
         } else if(xhr.status===500){
             alert("There was a server error.")
+        }else if(xhr.status===401){
+            alert("You Must Login..")
+            window.location.href= '/login'
         }
+
     };
     xhr.onerror = function () {
         alert("An Error occured");
@@ -62,7 +65,7 @@ function loadTweets(tweetsElements) {
     xhr.open(method, url);
     xhr.onload = function () {
         const serverResponse = xhr.response;
-        var listedItems = serverResponse.response;
+        var listedItems = serverResponse;
         var finalTweetStr = "";
         for (var i = 0; i < listedItems.length; i++) {
             var currentItem = formatTweetElement(listedItems[i]);
