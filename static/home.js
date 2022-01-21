@@ -84,7 +84,7 @@ function LikeBtn(tweet) {
     return "<button class='btn btn-primary' onclick=handleDidLike(" + tweet.id + "," + tweet.likes + ")>" + tweet.likes + " Likes</button>";
 }
 function formatTweetElement(tweet) {
-    var formattedTweet = "<div class=' col-12 col-md-10 mx-auto rounded py-3 border py-3 mb-4 tweet' id='tweet-" + tweet.id + "'><h1>" + tweet.id + "</h1>" + "<p>" + tweet.content +
+    var formattedTweet = "<div class=' col-12 col-md-10 mx-auto rounded py-3 border py-3 mb-4 tweet' id='tweet-" + tweet.id + "'>" + "<p>" + tweet.content +
         "</p><div class='btn-group'>" +
         LikeBtn(tweet) +
         "</div></div>";
