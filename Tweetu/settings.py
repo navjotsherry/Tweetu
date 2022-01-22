@@ -15,6 +15,7 @@ import os
 
 LOGIN_URL = "/login"
 MAX_TWEET_LENGTH =240
+TWEET_ACTION_OPTIONS = ["like","unlike","retweet"]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
